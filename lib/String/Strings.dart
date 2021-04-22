@@ -4,4 +4,5 @@ class Strings {
   static const String Login_title = "LOGIN";
   static const String enter_your_phone_number = "Enter your phone number to proceed";
   static const String phone_number = "PHONE NUMBER";
+  static const String login_password = "PASSWORD";
 }

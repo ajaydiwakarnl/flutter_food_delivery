@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_delivery/String/Strings.dart';
 import 'loginModel.dart';
-import 'package:form_validator/form_validator.dart';
+import 'package:flutter_udid/flutter_udid.dart';
 
 
 
@@ -56,13 +56,50 @@ class loginPage extends StatelessWidget {
 }
 
 void showLoginPopup(BuildContext context) {
-  LoginRequest loginRequest = new LoginRequest();
-  var formKey = GlobalKey<FormState>();
   showModalBottomSheet(
     context: context,
     builder: (ctx) {
       return Container(
-          height: MediaQuery.of(context).size.height  * 1100.0,
+        child: showLoginForm(),
+        height: MediaQuery.of(context).size.height  * 1100.0,
+      );
+    }
+  );
+}
+
+class showLoginForm extends StatefulWidget {
+  @override
+  _showLoginFormState createState() => _showLoginFormState();
+}
+
+class _showLoginFormState extends State<showLoginForm> {
+ final _formKey = GlobalKey<FormState>();
+ String _mobileNumber = "";
+ String _password = "";
+ String _udid = 'Unknown';
+ @override
+ void initState() {
+   super.initState();
+   initPlatformState();
+ }
+
+ Future<void> initPlatformState() async {
+   String udid;
+   try {
+     udid = await FlutterUdid.udid;
+   } on PlatformException {
+     udid = 'Failed to get UDID.';
+   }
+   if (!mounted) return;
+   setState(() {
+     _udid = udid;
+   });
+ }
+
+ @override
+  Widget build(BuildContext buildContext) {
+     return Form(
+       key: _formKey,
           child: SingleChildScrollView(child: Column(
               children: <Widget>[
                   Container(
@@ -78,21 +115,54 @@ void showLoginPopup(BuildContext context) {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(top:10.0,right: 280.0),
-                    child: Text(Strings.phone_number,
-                        style: TextStyle(fontSize: 14,color: Colors.grey)
-                    ),
-                  ),
-                  Container(
                     margin:const EdgeInsets.only(left:15.0,right: 15.0),
                     child: new TextFormField(
                       cursorColor: Colors.green,
+                      onSaved: (String val) => setState( () => _mobileNumber = val),
+                      decoration:  InputDecoration(
+                        labelText: Strings.phone_number,
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                        )
+                      ),
+                      validator:(value){
+                        if(value.isEmpty){
+                          return "This field is required";
+                        }
+                        if(value.length < 5){
+                          return "Invalid phone number";
+                        }
+                        if(value.length > 10){
+                          return "Invalid phone number";
+                        }
+                      },
                       keyboardType: TextInputType.number,
-                      maxLength: 10,
-                      validator: ValidationBuilder().phone("This field  is required").minLength(10).maxLength(10).build(),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly
                       ],
+                    ),
+                  ),
+                  Container(
+                    margin:const EdgeInsets.only(left:15.0,right: 15.0,top:10.0 ),
+                    child: new TextFormField(
+                      cursorColor: Colors.green,
+                      onSaved: (String val) => setState( () => _password = val),
+                      decoration:  InputDecoration(
+                        labelText: Strings.login_password,
+                        labelStyle: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                          )
+                      ),
+                      validator:(value){
+                        if(value.isEmpty){
+                          return "This field is required";
+                        }
+                        if(value.length < 6){
+                          return "Invalid password";
+                        }
+                      },
                     ),
                   ),
                   Container(
@@ -106,21 +176,28 @@ void showLoginPopup(BuildContext context) {
                       color: Colors.black,
                       textColor: Colors.white,
                       onPressed: () {
-                        doLogin(formKey);
+                        _formKey.currentState.save();
+                        _formKey.currentState.validate() ?
+                          SnackBar(content: Text("This field id required")) :
+                          SnackBar(content: Text("This field id required"));
+                          callLoginApi(_mobileNumber,_password);
                       },
                     ),
-                  )
+                  ),
+                  Text(_udid)
                 ] ,
-            ),
+
+          ),
           ),
       );
-    }
-  );
-}
-doLogin(formKey){
-  final isValid = formKey.currentState.validate();
-  if (!isValid) {
-    return;
   }
-  formKey.currentState.save();
+}
+
+callLoginApi(mobileNumber,password){
+  LoginRequest loginRequest = new LoginRequest();
+  loginRequest.mobileNumber = mobileNumber;
+  loginRequest.countryCode = "+91";
+  loginRequest.password = password;
+  //loginRequest.udId =
+
 }
