@@ -1,12 +1,17 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:food_delivery/Login/loginPage.dart';
+import 'package:food_delivery/Login/LoginPage.dart';
+
+import 'Home/HomePage.dart';
+import 'Login/LoginService.dart';
 
 void main(){
   runApp(splashApp());
 }
 
 class splashApp  extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,19 +31,46 @@ class splashPage extends StatefulWidget {
 }
 
 class _splashPageState extends State<splashPage> {
-  void initState() {
+  void initState(){
     super.initState();
     Timer(
         Duration(seconds: 4),
-        () => Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) =>loginPage() ))
+            () =>
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => LoginPage()))
     );
+
+    /*Timer(
+        Duration(seconds: 4),
+            () =>
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => LoginPage()))
+    );*/
+    /*if( checkUserIsLoggedIn() != null ){
+      Timer(
+          Duration(seconds: 4),
+              () => Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => HomePage() ))
+      );
+    }else {
+      Timer(
+          Duration(seconds: 4),
+              () =>
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => LoginPage()))
+      );
+    }*/
   }
     @override
   Widget build(BuildContext context) {
     return Container(
         color: Colors.white,
         child:Image.asset("assets/images/logo.png")
-
     );
   }
+}
+
+checkUserIsLoggedIn() async {
+  String token = await LoginService().getToken();
+  return token;
+
 }

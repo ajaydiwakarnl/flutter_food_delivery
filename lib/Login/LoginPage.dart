@@ -2,41 +2,47 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:food_delivery/CircularLoader.dart';
+import 'package:food_delivery/Home/HomePage.dart';
 import 'package:food_delivery/String/Strings.dart';
-import 'loginModel.dart';
+import 'LoginModel.dart';
 import 'package:flutter_udid/flutter_udid.dart';
+import 'LoginService.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
-
-class loginPage extends StatelessWidget {
+class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.green,
       body: Container(
-        margin: const EdgeInsets.only(top: 300.0),
+        height: MediaQuery.of(context).size.height,
+        width : MediaQuery.of(context).size.width,
+        margin: EdgeInsets.only(top:300.0),
+        padding: EdgeInsets.all(20.0),
+        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-              margin: const EdgeInsets.only(right: 280.0),
-              child: Text(Strings.login_account_title,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white
-                  )),
+              //margin: const EdgeInsets.only(right: 280.0),
+              child: Text(
+                  Strings.login_account_title,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
+                  textAlign: TextAlign.left,),
             ),
             Container(
-              margin: const EdgeInsets.only(right: 50.0,top:5.0 ),
+              margin: EdgeInsets.only(top: 5.0),
               child: Text(Strings.Login_login_create_account_quickly,
                   style: TextStyle(fontSize: 16,color: Colors.white)
               ),
             ),
             Container(
-                  width: 400.0,
-                  height: 85.0,
-                  padding: EdgeInsets.all(20.0),
+                  width: 500.0,
+                  height: 45.0,
+                  margin: EdgeInsets.only(top: 20.0),
                   child: RaisedButton(
                     child: Text(Strings.Login_title, style: TextStyle(fontSize: 15)),
                     shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
@@ -74,9 +80,11 @@ class showLoginForm extends StatefulWidget {
 
 class _showLoginFormState extends State<showLoginForm> {
  final _formKey = GlobalKey<FormState>();
- String _mobileNumber = "";
- String _password = "";
+ String _mobileNumber;
+ String _password;
  String _udid = 'Unknown';
+ bool _isLoading = false;
+
  @override
  void initState() {
    super.initState();
@@ -95,27 +103,31 @@ class _showLoginFormState extends State<showLoginForm> {
      _udid = udid;
    });
  }
-
  @override
-  Widget build(BuildContext buildContext) {
+ Widget build(BuildContext buildContext) {
+    return CircularLoader(
+        child: LoginUi(buildContext), inAsyncall: _isLoading,opacity: 0.5,color: Colors.black);
+ }
+
+  Widget LoginUi(BuildContext buildContext) {
      return Form(
        key: _formKey,
-          child: SingleChildScrollView(child: Column(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                   Container(
-                    margin: const EdgeInsets.only(top:25.0,right: 340.0),
                     child: Text(Strings.Login_title,
                         style: TextStyle(fontSize: 18,color: Colors.black)
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(top:10.0,right: 165.0),
                     child: Text(Strings.enter_your_phone_number,
                         style: TextStyle(fontSize: 15,color: Colors.grey)
                     ),
                   ),
                   Container(
-                    margin:const EdgeInsets.only(left:15.0,right: 15.0),
                     child: new TextFormField(
                       cursorColor: Colors.green,
                       onSaved: (String val) => setState( () => _mobileNumber = val),
@@ -123,10 +135,15 @@ class _showLoginFormState extends State<showLoginForm> {
                         labelText: Strings.phone_number,
                         labelStyle: TextStyle(
                           color: Colors.grey,
-                          fontSize: 14,
-                        )
-                      ),
-                      validator:(value){
+                          fontSize: 14,),
+                        enabledBorder: UnderlineInputBorder(
+                           borderSide: BorderSide(color: Colors.orange)
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.orange)
+                        ),
+                     ),
+                     validator:(value){
                         if(value.isEmpty){
                           return "This field is required";
                         }
@@ -144,8 +161,7 @@ class _showLoginFormState extends State<showLoginForm> {
                     ),
                   ),
                   Container(
-                    margin:const EdgeInsets.only(left:15.0,right: 15.0,top:10.0 ),
-                    child: new TextFormField(
+                    child:  new TextFormField(
                       cursorColor: Colors.green,
                       onSaved: (String val) => setState( () => _password = val),
                       decoration:  InputDecoration(
@@ -153,7 +169,13 @@ class _showLoginFormState extends State<showLoginForm> {
                         labelStyle: TextStyle(
                             color: Colors.grey,
                             fontSize: 14,
-                          )
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange)
+                          ),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.orange)
+                        ),
                       ),
                       validator:(value){
                         if(value.isEmpty){
@@ -166,38 +188,51 @@ class _showLoginFormState extends State<showLoginForm> {
                     ),
                   ),
                   Container(
-                    width: 450.0,
-                    height: 85.0,
-                    padding: EdgeInsets.all(20.0),
+                    width: 500.0,
+                    height: 45.0,
+                    margin: EdgeInsets.only(top: 20.0),
                     child: RaisedButton(
                       child: Text(Strings.Login_title, style: TextStyle(fontSize: 15)),
                       shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
                       disabledColor: Colors.grey,
                       color: Colors.black,
                       textColor: Colors.white,
-                      onPressed: () {
+                      onPressed: () async {
                         _formKey.currentState.save();
                         _formKey.currentState.validate() ?
                           SnackBar(content: Text("This field id required")) :
                           SnackBar(content: Text("This field id required"));
-                          callLoginApi(_mobileNumber,_password);
+                          if(_formKey.currentState.validate()) {
+                            setState(() {
+                              _isLoading = true;
+                            });
+
+                            LoginRequest loginRequest = new LoginRequest();
+                            LoginService loginService = new LoginService();
+
+                            loginRequest.mobileNumber = _mobileNumber;
+                            loginRequest.countryCode = "+91";
+                            loginRequest.password = _password;
+                            loginRequest.udId = _udid;
+                            var response = await loginService.login(loginRequest);
+
+                            if(response.error == "false"){
+                              setState(() {_isLoading = false;});
+                              Fluttertoast.showToast( msg: response.errorMessage, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIos: 2, backgroundColor: Colors.black, textColor: Colors.white);
+                              Navigator.push(context,MaterialPageRoute(builder: (context) => HomePage()),);
+                            }else{
+                              setState(() {_isLoading = false;});
+                              Fluttertoast.showToast( msg: response.errorMessage, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIos: 2, backgroundColor: Colors.black, textColor: Colors.white);
+                            }
+                          }
                       },
                     ),
                   ),
-                  Text(_udid)
+
                 ] ,
 
           ),
           ),
       );
   }
-}
-
-callLoginApi(mobileNumber,password){
-  LoginRequest loginRequest = new LoginRequest();
-  loginRequest.mobileNumber = mobileNumber;
-  loginRequest.countryCode = "+91";
-  loginRequest.password = password;
-  //loginRequest.udId =
-
 }
