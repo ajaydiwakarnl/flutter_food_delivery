@@ -18,15 +18,19 @@ class _SetDeliveryLocationState extends State<SetDeliveryLocation> {
     this.callAddressList();
   }
   callAddressList() async {
-    GetAddress getAddress = new GetAddress();
+
     GetAddressService getAddressService = new GetAddressService();
     var response = await getAddressService.GetAddressList();
+
     if(response.address.isNotEmpty){
       _listOfAddress = response.address;
     }else{
       _listOfAddress = [];
     }
 
+    setState(() {
+      _listOfAddress;
+    });
 
   }
   @override
@@ -60,13 +64,13 @@ class _SetDeliveryLocationState extends State<SetDeliveryLocation> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-          new GestureDetector(
-            /*onTap: (){
+          GestureDetector(
+            onTap: (){
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AddAddress()),
               );
-            },*/
+            },
             child:Container(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
