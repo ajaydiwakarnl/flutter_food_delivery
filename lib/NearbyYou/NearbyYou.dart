@@ -16,7 +16,11 @@ class _NearbyYouState extends State<NearbyYou> {
   
   void initState(){
     super.initState();
-    this.callListRestaurantApi("73CC2846-F4A8-42A1-A498-FAD815FD6649", "23.09212", "72.09212", "1 ");
+
+   setState(() {
+     this.callListRestaurantApi("73CC2846-F4A8-42A1-A498-FAD815FD6649", "23.09212", "72.09212", "1 ");
+   });
+
   }
 
 

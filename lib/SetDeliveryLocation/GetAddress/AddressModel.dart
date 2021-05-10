@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 GetAddress getAddressFromJson(String str) => GetAddress.fromJson(json.decode(str));
-
 String getAddressToJson(GetAddress data) => json.encode(data.toJson());
 
 class GetAddress {
@@ -29,6 +28,7 @@ class GetAddress {
 }
 
 class Address {
+
   Address({
     this.fullAddress,
     this.id,

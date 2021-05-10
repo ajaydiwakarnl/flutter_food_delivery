@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+
 class LoginRequest{
   String mobileNumber;
   String countryCode;
@@ -121,7 +122,6 @@ class UserDetails {
       isdelete : json['isdelete'],
     );
   }
-
-
-
 }
+
+

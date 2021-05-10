@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:food_delivery/SetDeliveryLocation/AddAddress.dart';
-import 'package:food_delivery/SetDeliveryLocation/GetAddressModel.dart';
-import 'package:food_delivery/SetDeliveryLocation/GetAddressService.dart';
+import 'package:food_delivery/SetDeliveryLocation/AddAddress/Address.dart';
+import 'package:food_delivery/SetDeliveryLocation/GetAddress/AddressModel.dart';
+import 'package:food_delivery/SetDeliveryLocation/GetAddress/AddressService.dart';
 import 'package:food_delivery/String/Strings.dart';
 
 class SetDeliveryLocation extends StatefulWidget {
@@ -12,7 +12,9 @@ class SetDeliveryLocation extends StatefulWidget {
 }
 
 class _SetDeliveryLocationState extends State<SetDeliveryLocation> {
+
   List<Address> _listOfAddress;
+
   void initState(){
     super.initState();
     this.callAddressList();

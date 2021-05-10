@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:food_delivery/Login/LoginService.dart';
-import 'package:food_delivery/SetDeliveryLocation/GetAddressModel.dart';
+import 'package:food_delivery/SetDeliveryLocation/GetAddress/AddressModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:food_delivery/ApiList.dart';

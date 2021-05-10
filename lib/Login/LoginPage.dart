@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:food_delivery/CheckUserExist/CheckUserExistModel.dart';
+import 'package:food_delivery/CheckUserExist/CheckUserExistService.dart';
 import 'package:food_delivery/CircularLoader.dart';
 import 'package:food_delivery/Home/HomePage.dart';
 import 'package:food_delivery/String/Strings.dart';
@@ -67,7 +70,7 @@ void showLoginPopup(BuildContext context) {
     builder: (ctx) {
       return Container(
         child: showLoginForm(),
-        height: MediaQuery.of(context).size.height  * 1100.0,
+        height: MediaQuery.of(context).size.height,
       );
     }
   );
@@ -84,6 +87,7 @@ class _showLoginFormState extends State<showLoginForm> {
  String _password;
  String _udid = 'Unknown';
  bool _isLoading = false;
+ bool _showPasswordInput = false;
 
  @override
  void initState() {
@@ -158,9 +162,9 @@ class _showLoginFormState extends State<showLoginForm> {
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly
                       ],
-                    ),
+                    ), //Email
                   ),
-                  Container(
+                  _showPasswordInput ? Container(
                     child:  new TextFormField(
                       cursorColor: Colors.green,
                       onSaved: (String val) => setState( () => _password = val),
@@ -185,8 +189,8 @@ class _showLoginFormState extends State<showLoginForm> {
                           return "Invalid password";
                         }
                       },
-                    ),
-                  ),
+                    ), //Password
+                  ) : SizedBox(),
                   Container(
                     width: 500.0,
                     height: 45.0,
@@ -202,37 +206,59 @@ class _showLoginFormState extends State<showLoginForm> {
                         _formKey.currentState.validate() ?
                           SnackBar(content: Text("This field id required")) :
                           SnackBar(content: Text("This field id required"));
+
                           if(_formKey.currentState.validate()) {
                             setState(() {
                               _isLoading = true;
                             });
 
-                            LoginRequest loginRequest = new LoginRequest();
-                            LoginService loginService = new LoginService();
+                            CheckUserExistRequest _ischeckUserExistRequest = new CheckUserExistRequest();
+                            CheckUserExistService _ischeckUserExistService = new CheckUserExistService();
 
-                            loginRequest.mobileNumber = _mobileNumber;
-                            loginRequest.countryCode = "+91";
-                            loginRequest.password = _password;
-                            loginRequest.udId = _udid;
-                            var response = await loginService.login(loginRequest);
+                            _ischeckUserExistRequest.mobileNumber = _mobileNumber;
+                            _ischeckUserExistRequest.countryCode = "+91";
 
-                            if(response.error == "false"){
-                              setState(() {_isLoading = false;});
-                              Fluttertoast.showToast( msg: response.errorMessage, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIos: 2, backgroundColor: Colors.black, textColor: Colors.white);
-                              Navigator.push(context,MaterialPageRoute(builder: (context) => HomePage()),);
+                            var response = await _ischeckUserExistService.CheckUser(_ischeckUserExistRequest);
+
+                            if(response.isNewUser == "true"){
                             }else{
-                              setState(() {_isLoading = false;});
-                              Fluttertoast.showToast( msg: response.errorMessage, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIos: 2, backgroundColor: Colors.black, textColor: Colors.white);
+                              setState(() {
+                                _showPasswordInput = true;
+                                _isLoading = false;
+                              });
+
+                              if( _showPasswordInput == true){
+
+                                LoginRequest loginRequest = new LoginRequest();
+                                LoginService loginService = new LoginService();
+
+                                if( _password != null ){
+
+                                  loginRequest.mobileNumber = _mobileNumber;
+                                  loginRequest.countryCode = "+91";
+                                  loginRequest.password = _password != null ? _password : "";
+                                  loginRequest.udId = _udid != null ? _udid : "";
+
+                                  var response = await loginService.login(loginRequest);
+
+                                  if(response.error == "false"){
+                                    setState(() {_isLoading = false;});
+                                    Fluttertoast.showToast( msg: response.errorMessage, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIos: 2, backgroundColor: Colors.black, textColor: Colors.white);
+                                    Navigator.push(context,MaterialPageRoute(builder: (context) => HomePage()),);
+                                  }else{
+                                    setState(() {_isLoading = false;});
+                                    Fluttertoast.showToast( msg: response.errorMessage, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIos: 2, backgroundColor: Colors.black, textColor: Colors.white);
+                                  }
+                                }
+                              }
                             }
                           }
-                      },
+                        },
+                      ),
                     ),
-                  ),
-
-                ] ,
-
+                  ] ,
+            ),
           ),
-          ),
-      );
+     );
   }
 }

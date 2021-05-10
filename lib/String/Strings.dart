@@ -15,7 +15,7 @@ class Strings {
   static const String using_gps = "Using GPS";
   static const String saved_address = "SAVED ADDRESS";
   static const String location = "LOCATION";
-  static const String apt_suite = "APT/SUITE (optional)";
+  static const String house_no = "HOUSE/FLAT NO (optional)";
   static const String landmark = "LANDMARK (optional)";
   static const String save_as = "SAVE AS";
   static const String home = "HOME";
