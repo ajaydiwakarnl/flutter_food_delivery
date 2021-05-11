@@ -1,5 +1,20 @@
 
 class Strings {
+
+  static const String awesome_thanks = "Awesome , Thanks!";
+  static const String confirmation_code_otp = "We have sent you a confirmation code via SMS. You should";
+  static const String get_it_soon = "get it soon";
+  static const String resend_within= "Resend OTP within";
+  static const String second= "seconds";
+  static const String resend= "Resend OTP";
+  static const String verify_and_proceed = "VERIFY AND PROCEED";
+  static const String sign_up = "SIGN UP ";
+  static const String email_address = "EMAIL ADDRESS";
+  static const String name = "NAME";
+  static const String terms_and_condtion = "By creating an account, I accept the Terms And Conditions";
+  //static const String tc = "Terms And Conditions";
+
+
   static const String login_account_title = "ACCOUNT";
   static const String Login_login_create_account_quickly = "Login / Create Account quickly to manage orders";
   static const String Login_title = "LOGIN";

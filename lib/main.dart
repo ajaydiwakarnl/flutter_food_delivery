@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/Login/LoginPage.dart';
 
+
 import 'Home/HomePage.dart';
 import 'Login/LoginService.dart';
 
@@ -72,5 +73,4 @@ class _splashPageState extends State<splashPage> {
 checkUserIsLoggedIn() async {
   String token = await LoginService().getToken();
   return token;
-
 }

@@ -7,7 +7,9 @@ import 'package:food_delivery/CheckUserExist/CheckUserExistModel.dart';
 import 'package:food_delivery/CheckUserExist/CheckUserExistService.dart';
 import 'package:food_delivery/CircularLoader.dart';
 import 'package:food_delivery/Home/HomePage.dart';
+import 'package:food_delivery/OtpVerfication/OtpVerification.dart';
 import 'package:food_delivery/String/Strings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'LoginModel.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'LoginService.dart';
@@ -106,6 +108,9 @@ class _showLoginFormState extends State<showLoginForm> {
    setState(() {
      _udid = udid;
    });
+
+   final SharedPreferences prefs = await SharedPreferences.getInstance();
+   prefs.setString('udid', udid);
  }
  @override
  Widget build(BuildContext buildContext) {
@@ -146,7 +151,7 @@ class _showLoginFormState extends State<showLoginForm> {
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.orange)
                         ),
-                     ),
+                      ),
                      validator:(value){
                         if(value.isEmpty){
                           return "This field is required";
@@ -167,6 +172,7 @@ class _showLoginFormState extends State<showLoginForm> {
                   _showPasswordInput ? Container(
                     child:  new TextFormField(
                       cursorColor: Colors.green,
+                      obscureText: true,
                       onSaved: (String val) => setState( () => _password = val),
                       decoration:  InputDecoration(
                         labelText: Strings.login_password,
@@ -212,6 +218,9 @@ class _showLoginFormState extends State<showLoginForm> {
                               _isLoading = true;
                             });
 
+                            final SharedPreferences prefs = await SharedPreferences.getInstance();
+                            prefs.setString('mobileNumber', _mobileNumber);
+
                             CheckUserExistRequest _ischeckUserExistRequest = new CheckUserExistRequest();
                             CheckUserExistService _ischeckUserExistService = new CheckUserExistService();
 
@@ -219,8 +228,15 @@ class _showLoginFormState extends State<showLoginForm> {
                             _ischeckUserExistRequest.countryCode = "+91";
 
                             var response = await _ischeckUserExistService.CheckUser(_ischeckUserExistRequest);
+                            //var response = "true";
 
-                            if(response.isNewUser == "true"){
+                            if(response.isNewUser == "true"/*response == "true"*/){
+                              setState(() {
+                                _isLoading = false;
+                              });
+
+                              Navigator.push(context,MaterialPageRoute(builder: (context) => OtpVerification()),);
+
                             }else{
                               setState(() {
                                 _showPasswordInput = true;
