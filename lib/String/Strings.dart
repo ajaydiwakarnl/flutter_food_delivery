@@ -13,8 +13,6 @@ class Strings {
   static const String name = "NAME";
   static const String terms_and_condtion = "By creating an account, I accept the Terms And Conditions";
   //static const String tc = "Terms And Conditions";
-
-
   static const String login_account_title = "ACCOUNT";
   static const String Login_login_create_account_quickly = "Login / Create Account quickly to manage orders";
   static const String Login_title = "LOGIN";
