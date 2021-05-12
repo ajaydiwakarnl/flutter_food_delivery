@@ -6,6 +6,7 @@ import 'LoginModel.dart';
 import 'package:food_delivery/ApiList.dart';
 
 class LoginService{
+
     Future<bool> setToken(String value) async {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         return prefs.setString('token', value);
