@@ -41,7 +41,7 @@ class ListRestaurantResponse {
     this.listRestaurants,
   });
 
-  List<Address> address;
+  List<UserAddress> address;
   String error;
   String errorMessage;
   List<Rating> ratings;
@@ -52,8 +52,9 @@ class ListRestaurantResponse {
   int totalPage;
   List<ListRestaurant> listRestaurants;
 
+  /*
   factory ListRestaurantResponse.fromJson(Map<String, dynamic> json) => ListRestaurantResponse(
-    address: List<Address>.from(json["address"].map((x) => Address.fromJson(x))),
+    address: List<UserAddress>.from(json["address"].map((x) => UserAddress.fromJson(x))) ,
     error: json["error"],
     errorMessage: json["errorMessage"],
     ratings: List<Rating>.from(json["ratings"].map((x) => Rating.fromJson(x))),
@@ -64,6 +65,29 @@ class ListRestaurantResponse {
     totalPage: json["totalPage"],
     listRestaurants: List<ListRestaurant>.from(json["listRestaurants"].map((x) => ListRestaurant.fromJson(x))),
   );
+*/
+  factory ListRestaurantResponse.fromJson(Map<String,dynamic> json){
+
+    if( json['error'] == "false"){
+      return ListRestaurantResponse(
+        address: List<UserAddress>.from(json["address"].map((x) => UserAddress.fromJson(x))) ,
+        error: json["error"],
+        errorMessage: json["errorMessage"],
+        ratings: List<Rating>.from(json["ratings"].map((x) => Rating.fromJson(x))),
+        ratingPending: json["ratingPending"],
+        cartCount: json["cartCount"],
+        restaurantCount: json["restaurantCount"],
+        banners: List<dynamic>.from(json["banners"].map((x) => x)),
+        totalPage: json["totalPage"],
+        listRestaurants: List<ListRestaurant>.from(json["listRestaurants"].map((x) => ListRestaurant.fromJson(x))),
+      );
+    }else{
+      return ListRestaurantResponse(
+        error : json['error'],
+        errorMessage : json['errorMessage'].toString() ,
+      );
+    }
+  }
 
   Map<String, dynamic> toJson() => {
     "address": List<dynamic>.from(address.map((x) => x.toJson())),
@@ -79,8 +103,8 @@ class ListRestaurantResponse {
   };
 }
 
-class Address {
-  Address({
+class UserAddress {
+  UserAddress({
     this.fullAddress,
     this.userId,
     this.location,
@@ -102,7 +126,7 @@ class Address {
   String type;
   int id;
 
-  factory Address.fromJson(Map<String, dynamic> json) => Address(
+  factory UserAddress.fromJson(Map<String, dynamic> json) => UserAddress(
     fullAddress: json["fullAddress"],
     userId: json["userId"],
     location: json["location"],

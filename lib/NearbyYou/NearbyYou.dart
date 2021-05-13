@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/NearbyYou/ListRestaurantService.dart';
 import 'package:food_delivery/SetDeliveryLocation/SetDeliveryLocation.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'ListRestaurantModel.dart';
 
 class NearbyYou extends StatefulWidget {
@@ -13,18 +16,25 @@ class NearbyYou extends StatefulWidget {
 class _NearbyYouState extends State<NearbyYou> {
   bool _isLoading = false;
   List<ListRestaurant> _listRestaurant;
-  List<Address> _userAddress;
+  List<UserAddress> _userAddress;
+  Location _location = Location();
+  LocationData _currentLocation;
+  String getCurrentAddress,getTagName,udId,latitude,longtitude;
+
   @override
   void initState(){
     super.initState();
-   setState(() {
-     this.callListRestaurantApi("73CC2846-F4A8-42A1-A498-FAD815FD6649", "23.09212", "72.09212", "1 ");
-   });
+     setState(() {
+       this.CurrentAddress();
+       _isLoading = true;
+     });
 
   }
 
-
   callListRestaurantApi(_udId,_latitude,_longitude,_pageNumber) async {
+      setState(() {
+        _isLoading = true;
+      });
     ListRestaurantRequest listRestaurantRequest = new ListRestaurantRequest();
     ListRestaurantService listRestaurantService = new ListRestaurantService();
     listRestaurantRequest.udId = _udId;
@@ -33,13 +43,13 @@ class _NearbyYouState extends State<NearbyYou> {
     listRestaurantRequest.pageNumber = _pageNumber;
     var response = await listRestaurantService.ListRestaurant(listRestaurantRequest);
 
-    if(response.listRestaurants.isNotEmpty){
+    if(response.listRestaurants != null){
       _listRestaurant = response.listRestaurants;
     }else{
       _listRestaurant = [];
     }
 
-    if(response.address.isNotEmpty){
+    if(response.address != null){
       _userAddress = response.address;
     }else{
       _userAddress = [];
@@ -48,6 +58,24 @@ class _NearbyYouState extends State<NearbyYou> {
       _listRestaurant;
       _userAddress;
     });
+  }
+
+  CurrentAddress() async {
+    _currentLocation = await _location.getLocation();
+    final _coordinates = new Coordinates(_currentLocation.latitude, _currentLocation.longitude);
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(_coordinates);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(()  {
+      getCurrentAddress = addresses.first.addressLine;
+      getTagName = addresses.first.locality;
+      udId =  prefs.get("udid");
+      latitude = _currentLocation.latitude.toString();
+      longtitude = _currentLocation.longitude.toString();
+
+      this.callListRestaurantApi(udId, latitude, longtitude, "1");
+    });
+
+
 
   }
   @override
@@ -69,12 +97,23 @@ class _NearbyYouState extends State<NearbyYou> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    child:Text(_userAddress != null ? _userAddress[0].type.toUpperCase() : "Test",
+
+                    child:
+                    getTagName != null ?
+                    Text( _userAddress != null ? _userAddress[0].type.toUpperCase() : getTagName,
                       style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.normal),
-                    ),
+                    ) :
+                    Text( _userAddress != null ? _userAddress[0].type.toUpperCase() : "WORKING",
+                      style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.normal),
+                    ) ,
                   ),
                   Container(
-                    child: Text(_userAddress != null ? _userAddress[0].fullAddress : "Test",
+                    child:
+                    getCurrentAddress != null ?
+                    Text( _userAddress != null ? _userAddress[0].fullAddress : getCurrentAddress,
+                      style: TextStyle(fontSize: 15,color: Colors.white,fontWeight: FontWeight.normal),
+                    ) :
+                    Text( _userAddress != null ? _userAddress[0].fullAddress : "Loading...",
                       style: TextStyle(fontSize: 15,color: Colors.white,fontWeight: FontWeight.normal),
                     ),
                   ),
@@ -140,7 +179,7 @@ class _NearbyYouState extends State<NearbyYou> {
               ]
           )
         );
-      }),
+      })
     );
   }
 }

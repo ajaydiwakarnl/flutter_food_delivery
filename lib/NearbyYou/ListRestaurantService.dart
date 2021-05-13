@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:food_delivery/Login/LoginService.dart';
+import 'package:food_delivery/Repository/StoreApiResponse.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:food_delivery/ApiList.dart';
@@ -43,8 +44,12 @@ class ListRestaurantService{
 
     if(response.statusCode == 200){
       var getAddress = ListRestaurantResponse.fromJson(json.decode(response.body)).address;
-      ListRestaurantService().setLatitude(getAddress[0].latitude);
-      ListRestaurantService().setLongitude(getAddress[0].longitude);
+      if(ListRestaurantResponse.fromJson(json.decode(response.body)).error == "false" ) {
+        ListRestaurantService().setLatitude(getAddress[0].latitude);
+        ListRestaurantService().setLongitude(getAddress[0].longitude);
+        StoreApiResponse().save("userAddress", getAddress[0].fullAddress);
+      }
+
       return ListRestaurantResponse.fromJson(json.decode(response.body));
     }else{
       throw Exception('something went wrong');

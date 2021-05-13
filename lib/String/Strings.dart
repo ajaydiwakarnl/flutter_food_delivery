@@ -39,6 +39,8 @@ class Strings {
   static const String managed_address = "Manage Addresses";
   static const String help = "Help";
   static const String faq_link = "FAQs and Links";
+  static const String edit_account = "EDIT ACCOUNT";
+  static const String cancel = "CANCEL";
   static const String logout = "LOGOUT";
 
 }
