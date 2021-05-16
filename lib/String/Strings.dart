@@ -36,6 +36,7 @@ class Strings {
   static const String other = "OTHER";
   static const String save = "SAVE";
   static const String edit = "EDIT";
+  static const String Add = "ADD";
   static const String managed_address = "Manage Addresses";
   static const String help = "Help";
   static const String faq_link = "FAQs and Links";

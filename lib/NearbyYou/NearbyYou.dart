@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/NearbyYou/ListRestaurantService.dart';
+import 'package:food_delivery/NearbyYou/RestaurantDetail/RestaurantMenu.dart';
 import 'package:food_delivery/SetDeliveryLocation/SetDeliveryLocation.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:location/location.dart';
@@ -17,6 +18,7 @@ class _NearbyYouState extends State<NearbyYou> {
   bool _isLoading = false;
   List<ListRestaurant> _listRestaurant;
   List<UserAddress> _userAddress;
+  List<Outlet> _listOutlet;
   Location _location = Location();
   LocationData _currentLocation;
   String getCurrentAddress,getTagName,udId,latitude,longtitude;
@@ -97,7 +99,6 @@ class _NearbyYouState extends State<NearbyYou> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-
                     child:
                     getTagName != null ?
                     Text( _userAddress != null ? _userAddress[0].type.toUpperCase() : getTagName,
@@ -135,50 +136,58 @@ class _NearbyYouState extends State<NearbyYou> {
 
       ),
       body: ListView.builder(itemCount: _listRestaurant != null ? _listRestaurant.length : 0 ,itemBuilder: (context,index){
-        return Card(
-            margin: EdgeInsets.all(10.0),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
-                  child: Image.network(
-                      _listRestaurant[index].restaurantImage,
-                      height: 150,
-                      fit:BoxFit.fill
-                  ),
-                ),
-                ListTile(
-                    title: Text(_listRestaurant[index].restaurantName , style: TextStyle(fontSize: 16,color: Colors.black,fontWeight: FontWeight.bold)),
-                    subtitle: Text(_listRestaurant[index].shortDescription != null ? _listRestaurant[index].shortDescription : " ",style: TextStyle(fontSize: 13,color: Colors.orange))
-                ),
-                Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left:14.0,bottom: 10.0),
-                      child:Text(_listRestaurant[index].displayTime,style: TextStyle(fontSize: 13,color: Colors.black)),
-                    ),
-                    Container(
-                      width: 65.0,
-                      height: 25.0,
-                      margin: EdgeInsets.only(left: 20.0,bottom: 10.0),
-                      child: RaisedButton.icon(
-                        label: Text(_listRestaurant[index].averageReview, style: TextStyle(fontSize: 13)),
-                        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
-                        disabledColor: Colors.grey,
-                        color: Colors.green,
-                        textColor: Colors.white,
-                        icon: Icon(Icons.star,size: 10,color: Colors.white,),
-                        onPressed: () {},
-                      ),
-                    )
-                  ],
-                )
 
-              ]
-          )
+        return GestureDetector(
+            onTap: (){
+              log(_listRestaurant[index].outlet[0].outletName);
+              Navigator.push(context,MaterialPageRoute(builder: (context) => RestaurantMenu(outletId:_listRestaurant[index].outlet[0].outletId)),);
+            },
+            child: Card(
+                margin: EdgeInsets.all(10.0),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
+                        child: Image.network(
+                            _listRestaurant[index].restaurantImage,
+                            height: 150,
+                            fit:BoxFit.fill
+                        ),
+                      ),
+                      ListTile(
+                          title: Text(_listRestaurant[index].restaurantName , style: TextStyle(fontSize: 16,color: Colors.black,fontWeight: FontWeight.bold)),
+                          subtitle: Text(_listRestaurant[index].shortDescription != null ? _listRestaurant[index].shortDescription : " ",style: TextStyle(fontSize: 13,color: Colors.orange))
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(left:14.0,bottom: 10.0),
+                            child:Text(_listRestaurant[index].displayTime,style: TextStyle(fontSize: 13,color: Colors.black)),
+                          ),
+                          Container(
+                            width: 65.0,
+                            height: 25.0,
+                            margin: EdgeInsets.only(left: 20.0,bottom: 10.0),
+                            child: RaisedButton.icon(
+                              label: Text(_listRestaurant[index].averageReview, style: TextStyle(fontSize: 13)),
+                              shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
+                              disabledColor: Colors.grey,
+                              color: Colors.green,
+                              textColor: Colors.white,
+                              icon: Icon(Icons.star,size: 10,color: Colors.white,),
+                              onPressed: () {},
+                            ),
+                          )
+                        ],
+                      )
+
+                    ]
+                )
+            ),
         );
+
       })
     );
   }

@@ -1,5 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:food_delivery/Account/GetProfile/AccountModel.dart';
+import 'package:food_delivery/Account/GetProfile/AccountService.dart';
 import 'package:food_delivery/Login/LoginModel.dart';
 import 'package:food_delivery/Repository/StoreApiResponse.dart';
 import 'package:food_delivery/String/Strings.dart';
@@ -12,6 +14,7 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   String userName,userEmail,userPhoneNumber,userAddress;
+  UsersDetails _userDetails;
   void initState(){
     super.initState();
 
@@ -22,19 +25,34 @@ class _AccountState extends State<Account> {
   }
 
   getUser() async {
+    AccountService accountService = AccountService();
+    var response = await accountService.getProfile();
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if(response.usersDetails != null){
+        _userDetails = response.usersDetails;
+      }
+      userAddress =  prefs.get("userAddress");
+      userName =  prefs.getString("userName");
+      userEmail =  prefs.getString("userEmail");
+      userPhoneNumber =  prefs.get("userMobile");
+
+
+    });
+
+   /*
     setState(() {
       userName =  prefs.getString("userName");
       userEmail =  prefs.getString("userEmail");
       userPhoneNumber =  prefs.get("userMobile");
-      userAddress =  prefs.get("userAddress");
+
 
       log(userName);
       log(userEmail);
       log(userPhoneNumber);
       log(userAddress);
 
-    });
+    });*/
 
   }
   @override
@@ -66,21 +84,21 @@ class _AccountState extends State<Account> {
                         children: [
                           Container(
                             child: Text(
-                              userName != null ? userName : "jeo",
+                              _userDetails != null ? _userDetails.userName : "joe",
                               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.black),
                               textAlign: TextAlign.left,),
                           ),
                           Container(
                             margin: EdgeInsets.only(top: 6),
                             child: Text(
-                              userPhoneNumber != null ? userPhoneNumber : "123456789",
+                              _userDetails!= null ? _userDetails.mobileNumber : "12345678",
                               style: TextStyle(fontSize: 14, color: Colors.black54),
                               textAlign: TextAlign.left,),
                           ),
                           Container(
                             margin: EdgeInsets.only(top: 6),
                             child: Text(
-                              userEmail != null ? userEmail : "jeo@gmail.com",
+                              _userDetails  != null ? _userDetails.email  : "joe@gmail.com",
                               style: TextStyle(fontSize: 14, color: Colors.black54),
                               textAlign: TextAlign.left,),
                           ),
@@ -256,7 +274,7 @@ class _AccountState extends State<Account> {
                                 borderSide: BorderSide(color: Colors.deepOrange)
                             ),
                           ),
-                          controller: TextEditingController()..text = userName,
+                          controller: TextEditingController()..text = _userDetails != null ?  _userDetails.userName : userName,
 
                         ),
                       ),
@@ -276,7 +294,7 @@ class _AccountState extends State<Account> {
                                 borderSide: BorderSide(color: Colors.deepOrange)
                             ),
                           ),
-                          controller: TextEditingController()..text = userEmail,
+                          controller: TextEditingController()..text = _userDetails != null ?  _userDetails.email : userEmail,
 
                         ),
                       ),
