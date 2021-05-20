@@ -20,47 +20,52 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: Colors.white,
       body: Container(
         height: MediaQuery.of(context).size.height,
         width : MediaQuery.of(context).size.width,
-        margin: EdgeInsets.only(top:300.0),
         padding: EdgeInsets.all(20.0),
-        
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              //margin: const EdgeInsets.only(right: 280.0),
-              child: Text(
+        child:Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+
+              Container(
+                margin: EdgeInsets.only(top:300.0),
+                child: Text(
                   Strings.login_account_title,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
+                  style: TextStyle(fontSize: 20, fontFamily:'Proxima_Nova_ScOsf_Bold', color: Colors.black,fontWeight: FontWeight.w500),
                   textAlign: TextAlign.left,),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 5.0),
-              child: Text(Strings.Login_login_create_account_quickly,
-                  style: TextStyle(fontSize: 16,color: Colors.white)
               ),
-            ),
-            Container(
-                  width: 500.0,
-                  height: 45.0,
-                  margin: EdgeInsets.only(top: 20.0),
-                  child: RaisedButton(
-                    child: Text(Strings.Login_title, style: TextStyle(fontSize: 15)),
-                    shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
-                    disabledColor: Colors.grey,
-                    color: Colors.black,
-                    textColor: Colors.white,
-                    onPressed: () {
-                        showLoginPopup(context);
-                    },
-                  ),
-            )
-          ],
-        ),
+              Container(
+                margin: EdgeInsets.only(top: 5.0),
+                child: Text(Strings.Login_login_create_account_quickly,
+                    style: TextStyle(fontSize: 15,
+                        fontFamily:'Proxima_Nova_Alt_Light',
+                        color: Colors.black)
+                ),
+              ),
+              Container(
+                width: 500.0,
+                height: 46.0,
+                margin: EdgeInsets.only(top: 20.0),
+                child: RaisedButton(
+                  child: Text(Strings.Login_title, style: TextStyle(fontFamily:'Proxima_Nova_ScOsf_Bold',fontSize: 18)),
+                  shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(4.0)),
+                  disabledColor: Colors.grey,
+                  color: Colors.deepOrange,
+                  textColor: Colors.white,
+                  onPressed: () {
+                    showLoginPopup(context);
+                  },
+                ),
+              )
+            ],
+          ),
+        )
+
+
       ),
     );
   }
@@ -128,114 +133,104 @@ class _showLoginFormState extends State<showLoginForm> {
               children: <Widget>[
                   Container(
                     child: Text(Strings.Login_title,
-                        style: TextStyle(fontSize: 18,color: Colors.black)
+                        style: TextStyle(fontSize: 20, fontFamily:'Proxima_Nova_ScOsf_Bold', color: Colors.black,fontWeight: FontWeight.w500)
                     ),
                   ),
                   Container(
                     child: Text(Strings.enter_your_phone_number,
-                        style: TextStyle(fontSize: 15,color: Colors.grey)
+                        style: TextStyle(fontSize: 14,
+                            fontFamily:'Proxima_Nova_Alt_Light',
+                            color: Colors.black)
                     ),
                   ),
                   Container(
                     child: new TextFormField(
-                      cursorColor: Colors.green,
+                      cursorColor: Colors.deepOrange,
                       onSaved: (String val) => setState( () => _mobileNumber = val),
                       decoration:  InputDecoration(
                         labelText: Strings.phone_number,
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,),
+                        labelStyle: TextStyle(fontSize: 14,
+                            fontFamily:'Proxima_Nova_Alt_Light',
+                            color: Colors.black),
                         enabledBorder: UnderlineInputBorder(
-                           borderSide: BorderSide(color: Colors.orange)
+                           borderSide: BorderSide(color: Colors.deepOrange,width: 2 ),
                         ),
                         focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange)
+                            borderSide: BorderSide(color: Colors.deepOrange,width: 2)
                         ),
                       ),
-                     validator:(value){
-                        if(value.isEmpty){
-                          return "This field is required";
-                        }
-                        if(value.length < 5){
-                          return "Invalid phone number";
-                        }
-                        if(value.length > 10){
-                          return "Invalid phone number";
-                        }
-                      },
                       keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
                     ), //Email
                   ),
                   _showPasswordInput ? Container(
                     child:  new TextFormField(
-                      cursorColor: Colors.green,
+                      cursorColor: Colors.deepOrange,
                       obscureText: true,
                       onSaved: (String val) => setState( () => _password = val),
                       decoration:  InputDecoration(
                         labelText: Strings.login_password,
-                        labelStyle: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
+                        labelStyle: TextStyle(fontSize: 14,
+                            fontFamily:'Proxima_Nova_Alt_Light',
+                            color: Colors.black
                           ),
                           enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.orange)
+                              borderSide: BorderSide(color: Colors.deepOrange,width: 2)
                           ),
                         focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange)
+                            borderSide: BorderSide(color: Colors.deepOrange,width: 2)
                         ),
                       ),
-                      validator:(value){
-                        if(value.isEmpty){
-                          return "This field is required";
-                        }
-                        if(value.length < 6){
-                          return "Invalid password";
-                        }
-                      },
                     ), //Password
                   ) : SizedBox(),
                   Container(
                     width: 500.0,
-                    height: 45.0,
+                    height: 46.0,
                     margin: EdgeInsets.only(top: 20.0),
                     child: RaisedButton(
-                      child: Text(Strings.Login_title, style: TextStyle(fontSize: 15)),
+                      child: Text(Strings.Login_title, style: TextStyle(fontSize: 18, fontFamily:'Proxima_Nova_ScOsf_Bold', color: Colors.white,fontWeight: FontWeight.w500)),
                       shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
                       disabledColor: Colors.grey,
-                      color: Colors.black,
+                      color: Colors.deepOrange,
                       textColor: Colors.white,
                       onPressed: () async {
                         _formKey.currentState.save();
-                        _formKey.currentState.validate() ?
-                          SnackBar(content: Text("This field id required")) :
-                          SnackBar(content: Text("This field id required"));
 
                           if(_formKey.currentState.validate()) {
                             setState(() {
                               _isLoading = true;
                             });
 
-                            final SharedPreferences prefs = await SharedPreferences.getInstance();
-                            prefs.setString('mobileNumber', _mobileNumber);
-
                             CheckUserExistRequest _ischeckUserExistRequest = new CheckUserExistRequest();
                             CheckUserExistService _ischeckUserExistService = new CheckUserExistService();
 
-                            _ischeckUserExistRequest.mobileNumber = _mobileNumber;
+                            final SharedPreferences prefs = await SharedPreferences.getInstance();
+                            prefs.setString('mobileNumber', _mobileNumber);
+
+                            _ischeckUserExistRequest.mobileNumber = _mobileNumber != null ? _mobileNumber : "";
                             _ischeckUserExistRequest.countryCode = "+91";
 
                             var response = await _ischeckUserExistService.CheckUser(_ischeckUserExistRequest);
-                            //var response = "true";
+                            log(response.errorMessage);
 
-                            if(response.isNewUser == "true"/*response == "true"*/){
+                            if(response.error == "true"){
+                              Fluttertoast.showToast(
+                                  msg: response.errorMessage,
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM, timeInSecForIos: 2,
+                                  backgroundColor: Colors.black,
+                                  textColor: Colors.white,
+                                  fontSize: 13
+
+                              );
+                            }
+                            else if(response.isNewUser == "true"){
                               setState(() {
                                 _isLoading = false;
                               });
 
-                              Navigator.push(context,MaterialPageRoute(builder: (context) => OtpVerification()),);
+                              Navigator.push(context, MaterialPageRoute(builder: (
+                                  context) => OtpVerification()),);
+
 
                             }else{
                               setState(() {
@@ -256,14 +251,32 @@ class _showLoginFormState extends State<showLoginForm> {
                                   loginRequest.udId = _udid != null ? _udid : "";
 
                                   var response = await loginService.login(loginRequest);
-
+                                   log(response.errorMessage);
                                   if(response.error == "false"){
                                     setState(() {_isLoading = false;});
-                                    Fluttertoast.showToast( msg: response.errorMessage, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIos: 2, backgroundColor: Colors.black, textColor: Colors.white);
+                                    Fluttertoast.showToast(
+                                        msg: Strings.login_sucess,
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM, timeInSecForIos: 2,
+                                        backgroundColor: Colors.black,
+                                        textColor: Colors.white,
+                                        fontSize: 13
+
+                                    );
+
                                     Navigator.push(context,MaterialPageRoute(builder: (context) => HomePage()),);
                                   }else{
                                     setState(() {_isLoading = false;});
-                                    Fluttertoast.showToast( msg: response.errorMessage, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIos: 2, backgroundColor: Colors.black, textColor: Colors.white);
+                                    Fluttertoast.showToast(
+                                        msg: response.errorMessage,
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM, timeInSecForIos: 2,
+                                        backgroundColor: Colors.black,
+                                        textColor: Colors.white,
+                                        fontSize: 13
+
+                                    );
+
                                   }
                                 }
                               }

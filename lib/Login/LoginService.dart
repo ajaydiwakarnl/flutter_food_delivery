@@ -29,9 +29,11 @@ class LoginService{
             var token = LoginResponse.fromJson(json.decode(response.body)).accessToken;
             var user = LoginResponse.fromJson(json.decode(response.body)).Userdetails;
             LoginService().setToken(token);
-            StoreApiResponse().save("userName", user.userName);
-            StoreApiResponse().save("userEmail", user.email);
-            StoreApiResponse().save("userMobile", user.mobileNumber);
+            if(LoginResponse.fromJson(json.decode(response.body)).error == "false") {
+                StoreApiResponse().save("userName", user.userName);
+                StoreApiResponse().save("userEmail", user.email);
+                StoreApiResponse().save("userMobile", user.mobileNumber);
+            }
             return LoginResponse.fromJson(json.decode(response.body));
         }else{
            throw Exception('something went wrong');

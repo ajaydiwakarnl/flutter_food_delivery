@@ -98,6 +98,7 @@ class CategoryValue {
     this.dishCustomisation,
     this.isCustomizable,
     this.description,
+    this.Counter
   });
 
   dynamic categoryId;
@@ -119,6 +120,7 @@ class CategoryValue {
   List<DishCustomisation> dishCustomisation;
   int isCustomizable;
   String description;
+  int Counter ;
 
   factory CategoryValue.fromJson(Map<String, dynamic> json) => CategoryValue(
     categoryId: json["categoryId"],
@@ -140,6 +142,7 @@ class CategoryValue {
     dishCustomisation: List<DishCustomisation>.from(json["dishCustomisation"].map((x) => DishCustomisation.fromJson(x))),
     isCustomizable: json["isCustomizable"],
     description: json["description"] == null ? null : json["description"],
+    Counter: 0,
   );
 
   Map<String, dynamic> toJson() => {
@@ -162,6 +165,7 @@ class CategoryValue {
     "dishCustomisation": List<dynamic>.from(dishCustomisation.map((x) => x.toJson())),
     "isCustomizable": isCustomizable,
     "description": description == null ? null : description,
+    "Counter": Counter,
   };
 }
 
@@ -576,4 +580,45 @@ class CouponDetail {
   };
 }
 
+
+class AddToCartRequest{
+
+  String outletId;
+  String udId;
+  String dishes;
+
+
+  AddToCartRequest( { this.outletId, this.udId, this.dishes });
+
+  Map<String,dynamic> toJson(){
+    Map<String,dynamic> map = {
+      'outletId' : outletId,
+      'udId'     : udId,
+      'dishes'   : dishes,
+    };
+    return map;
+  }
+
+}
+
+class AddToCartResponse {
+
+  AddToCartResponse({
+    this.error,
+    this.errorMessage,
+  });
+
+  String error;
+  String errorMessage;
+
+  factory AddToCartResponse.fromJson(Map<String, dynamic> json) => AddToCartResponse(
+    error: json["error"],
+    errorMessage: json["errorMessage"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "error": error,
+    "errorMessage": errorMessage,
+  };
+}
 

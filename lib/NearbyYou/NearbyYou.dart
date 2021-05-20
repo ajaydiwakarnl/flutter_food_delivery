@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery/NearbyYou/ListRestaurantService.dart';
 import 'package:food_delivery/NearbyYou/RestaurantDetail/RestaurantMenu.dart';
 import 'package:food_delivery/SetDeliveryLocation/SetDeliveryLocation.dart';
+import 'package:food_delivery/String/Strings.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,8 +54,6 @@ class _NearbyYouState extends State<NearbyYou> {
 
     if(response.address != null){
       _userAddress = response.address;
-    }else{
-      _userAddress = [];
     }
     setState(() {
       _listRestaurant;
@@ -84,7 +83,7 @@ class _NearbyYouState extends State<NearbyYou> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         title: Column(
           children: <Widget>[
@@ -102,20 +101,24 @@ class _NearbyYouState extends State<NearbyYou> {
                     child:
                     getTagName != null ?
                     Text( _userAddress != null ? _userAddress[0].type.toUpperCase() : getTagName,
-                      style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.normal),
+                      style: TextStyle(fontSize: 20, fontFamily:'Proxima_Nova_ScOsf_Bold', color: Colors.black,fontWeight: FontWeight.w500),
                     ) :
                     Text( _userAddress != null ? _userAddress[0].type.toUpperCase() : "WORKING",
-                      style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.normal),
+                      style: TextStyle(fontSize: 20, fontFamily:'Proxima_Nova_ScOsf_Bold', color: Colors.black,fontWeight: FontWeight.w500),
                     ) ,
                   ),
                   Container(
                     child:
                     getCurrentAddress != null ?
                     Text( _userAddress != null ? _userAddress[0].fullAddress : getCurrentAddress,
-                      style: TextStyle(fontSize: 15,color: Colors.white,fontWeight: FontWeight.normal),
+                      style: TextStyle(fontSize: 14,
+                          fontFamily:'Proxima_Nova_Alt_Light',
+                          color: Colors.black),
                     ) :
                     Text( _userAddress != null ? _userAddress[0].fullAddress : "Loading...",
-                      style: TextStyle(fontSize: 15,color: Colors.white,fontWeight: FontWeight.normal),
+                      style: TextStyle(fontSize: 14,
+                          fontFamily:'Proxima_Nova_Alt_Light',
+                          color: Colors.black),
                     ),
                   ),
                 ],
@@ -128,67 +131,186 @@ class _NearbyYouState extends State<NearbyYou> {
           IconButton(
             icon: Icon(
               Icons.location_on,
-              color: Colors.white,
+              color: Colors.black,
 
             ),
           )
         ],
 
       ),
-      body: ListView.builder(itemCount: _listRestaurant != null ? _listRestaurant.length : 0 ,itemBuilder: (context,index){
+      body: Container(
+          child:ListView.builder(
+              itemCount: _listRestaurant != null ? _listRestaurant.length : 0 ,itemBuilder: (context,index){
+            return Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if( index == 0)
+                    Container(
+                    margin: EdgeInsets.only(top:20,left: 10,),
+                    child: Text(
+                        Strings.all_restaturant,
+                        style: TextStyle(fontSize: 20, fontFamily:'Proxima_Nova_ScOsf_Bold', color: Colors.black,fontWeight: FontWeight.w500)
+                    ),
+                  ),
+                  if( index == 0)
+                    Container(
+                    margin: EdgeInsets.only(left: 10,bottom: 10),
+                    child: Text(
+                        Strings.discover_unique_tast,
+                        style: TextStyle(fontSize: 15, fontFamily:'Proxima_Nova_Alt_Light', color: Colors.black,fontWeight: FontWeight.w500)
+                    ),
+                  ),
 
-        return GestureDetector(
-            onTap: (){
-              log(_listRestaurant[index].outlet[0].outletName);
-              Navigator.push(context,MaterialPageRoute(builder: (context) => RestaurantMenu(outletId:_listRestaurant[index].outlet[0].outletId)),);
-            },
-            child: Card(
-                margin: EdgeInsets.all(10.0),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
-                        child: Image.network(
-                            _listRestaurant[index].restaurantImage,
-                            height: 150,
-                            fit:BoxFit.fill
-                        ),
-                      ),
-                      ListTile(
-                          title: Text(_listRestaurant[index].restaurantName , style: TextStyle(fontSize: 16,color: Colors.black,fontWeight: FontWeight.bold)),
-                          subtitle: Text(_listRestaurant[index].shortDescription != null ? _listRestaurant[index].shortDescription : " ",style: TextStyle(fontSize: 13,color: Colors.orange))
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(left:14.0,bottom: 10.0),
-                            child:Text(_listRestaurant[index].displayTime,style: TextStyle(fontSize: 13,color: Colors.black)),
-                          ),
-                          Container(
-                            width: 65.0,
-                            height: 25.0,
-                            margin: EdgeInsets.only(left: 20.0,bottom: 10.0),
-                            child: RaisedButton.icon(
-                              label: Text(_listRestaurant[index].averageReview, style: TextStyle(fontSize: 13)),
-                              shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
-                              disabledColor: Colors.grey,
-                              color: Colors.green,
-                              textColor: Colors.white,
-                              icon: Icon(Icons.star,size: 10,color: Colors.white,),
-                              onPressed: () {},
-                            ),
-                          )
-                        ],
-                      )
+                  Container(
+                    child: Column(
+                      children: [
+                        Column(
+                          children: [
+                              Row(
+                                children: [
+                                  Flexible(
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        log(_listRestaurant[index].outlet[0].outletName);
+                                        Navigator.push(context,MaterialPageRoute(builder: (context) => RestaurantMenu(outletId:_listRestaurant[index].outlet[0].outletId)),);
+                                      },
+                                     child: Row(
+                                       children: [
+                                         Stack(
+                                           alignment: Alignment.bottomCenter,
+                                           children: <Widget>[
+                                             Container(
+                                               child: ClipRRect(
+                                                 borderRadius: BorderRadius.circular(6.0),
+                                                 child: Image.network(
+                                                   _listRestaurant[index].restaurantImage,
+                                                   width: 120,
+                                                   height: 120,
+                                                   fit:BoxFit.fill,
+                                                 ),
+                                               ),
+                                               padding: EdgeInsets.all(10),
+                                             ),
+                                             Container(
+                                               child: RaisedButton(
+                                                 child: Text("50% OFF", style: TextStyle(fontSize: 18,fontFamily:'Proxima_Nova_ScOsf_Bold', color: Colors.black,fontWeight: FontWeight.w500)),
+                                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0),
+                                                     side: BorderSide(color: Colors.deepOrange)),
+                                                 disabledColor: Colors.grey,
+                                                 textColor: Colors.white,
+                                                 color:Colors.white,
+                                                 onPressed: () async {
+                                                 },
+                                               ),
+                                             )
+                                           ],
+                                         ),
+                                         Container(
+                                           margin: EdgeInsets.all(10),
+                                           child:Column(
+                                             crossAxisAlignment: CrossAxisAlignment.start,
+                                             children: [
+                                               Container(
+                                                 margin: EdgeInsets.only(top:6),
+                                                 child: Text(
+                                                     _listRestaurant[index].restaurantName,
+                                                     style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.w500,
+                                                         fontFamily: "Proxima_Nova_ScOsf_Bold")),
+                                               ),
 
-                    ]
-                )
-            ),
-        );
+                                               Container(
+                                                   margin: EdgeInsets.only(top:5),
+                                                   child:Text(
+                                                       "Old Jodhpur",
+                                                       style: TextStyle(
+                                                           fontSize: 15,
+                                                           fontFamily:'Proxima_Nova_Alt_Light',
+                                                           color: Colors.black54,fontWeight: FontWeight.bold)
+                                                   )
+                                               ),
+                                               Container(
+                                                 margin: EdgeInsets.only(top:2),
+                                                 child: Row(
+                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                   children: [
+                                                     Container(
+                                                       padding: EdgeInsets.only(top:5,right:5 ),
+                                                       child: Column(
+                                                         children: [
+                                                           Icon(Icons.star,color: Colors.black,size:15,),
+                                                         ],
+                                                       ),
+                                                     ),
+                                                     Container(
+                                                       padding: EdgeInsets.only(top:5,right:5 ),
+                                                       child: Column(
+                                                         children: [
+                                                           Text(
+                                                             _listRestaurant[index].averageReview,
+                                                             style: TextStyle(fontSize: 13, fontFamily:'Proxima_Nova_Alt_Bold', color: Colors.green),
+                                                           ),
 
-      })
+                                                         ],
+                                                       ),
+                                                     ),
+                                                     Container(
+                                                       padding: EdgeInsets.only(top:5,right:5,left:5 ),
+                                                       child: Column(
+                                                         children: [
+                                                           Text(
+                                                             _listRestaurant[index].displayTime ,
+                                                             style: TextStyle(fontSize: 13, fontFamily:'Proxima_Nova_Alt_Bold', color: Colors.deepOrange),
+                                                           ),
+                                                         ],
+                                                       ),
+                                                     ),
+                                                     Container(
+                                                       padding: EdgeInsets.only(top:5,right:5,left:5 ),
+                                                       child: Column(
+                                                         children: [
+                                                           Text(
+                                                             _listRestaurant[index].costForTwo.toString() + " for two",
+                                                             style: TextStyle(fontSize: 15, fontFamily:'Proxima_Nova_Alt_Bold', color: Colors.black),
+                                                           ),
+                                                         ],
+                                                       ),
+                                                     ),
+
+
+                                                   ],
+                                                 ),
+
+                                               ),
+                                               Container(
+                                                   margin: EdgeInsets.only(top:8),
+                                                   child:Text(
+                                                       _listRestaurant[index].shortDescription != null ? _listRestaurant[index].shortDescription : "",
+                                                       style: TextStyle(fontSize: 15,color: Colors.black54,
+                                                         fontFamily:'ProximaNova_Regular',)
+                                                   )
+                                               ),
+                                             ],
+                                           ),
+                                         ),
+
+                                       ],
+                                     ),
+                                    )
+                                  )
+                                ],
+                              ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          })
+      )
+
     );
   }
 }

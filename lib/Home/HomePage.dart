@@ -43,28 +43,29 @@ class _HomePageState extends State<HomePage> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                title: Text(Strings.bottom_nav_near_you),
+                title: Text(Strings.bottom_nav_near_you,
+                  style: TextStyle(fontSize: 13, fontFamily:'Proxima_Nova_ScOsf_Bold',fontWeight: FontWeight.w500),),
                 backgroundColor: Colors.green,
             ),
             BottomNavigationBarItem(
                 icon: Icon(Icons.search),
-                title: Text(Strings.bottom_explore),
+                title: Text(Strings.bottom_explore,style: TextStyle(fontSize: 13, fontFamily:'Proxima_Nova_ScOsf_Bold',fontWeight: FontWeight.w500),),
                 backgroundColor: Colors.green
             ),
             BottomNavigationBarItem(
                 icon: Icon(Icons.shopping_cart),
-                title: Text(Strings.bottom_cart),
+                title: Text(Strings.bottom_cart,style: TextStyle(fontSize: 13, fontFamily:'Proxima_Nova_ScOsf_Bold',fontWeight: FontWeight.w500),),
                 backgroundColor: Colors.green
             ),
             BottomNavigationBarItem(
                 icon: Icon(Icons.person),
-                title: Text(Strings.bottom_account),
+                title: Text(Strings.bottom_account,style: TextStyle(fontSize: 13, fontFamily:'Proxima_Nova_ScOsf_Bold',fontWeight: FontWeight.w500),),
                 backgroundColor: Colors.green
             ),
           ],
           type: BottomNavigationBarType.fixed,
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.orange,
+          selectedItemColor: Colors.deepOrange,
           iconSize: 25,
           onTap: _onItemTapped,
           elevation: 5

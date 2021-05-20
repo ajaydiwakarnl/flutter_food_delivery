@@ -1,10 +1,14 @@
 
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:food_delivery/Cart/Cart.dart';
 import 'package:food_delivery/NearbyYou/RestaurantDetail/DishModel.dart';
 import 'package:food_delivery/NearbyYou/RestaurantDetail/DishService.dart';
 import 'package:food_delivery/String/Strings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class RestaurantMenu extends StatefulWidget {
   final int outletId;
@@ -21,9 +25,26 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
   List<CouponDetail>  _couponList;
   Outlets _getOutlet;
   getOutletResponse _outletResponse;
-  CouponResponse    _couponResponse;
+  CouponResponse _couponResponse;
   List <Item> _data = generateItems(0);
-  int _length  = 0,_cuponLength = 0;
+  int _length  = 0,_cuponLength = 0, _noOfQuantity = 0,_displayPrice = 0;
+  String _udId,_sendoutletId;
+  List<Map<String, dynamic>>  _dishes ;
+  bool viewVisible = true ;
+
+  void showWidget(){
+    setState(() {
+      viewVisible = true ;
+    });
+  }
+
+  void hideWidget(){
+    setState(() {
+      viewVisible = false ;
+    });
+  }
+
+
 
   void initState(){
     setState(() {
@@ -31,6 +52,7 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
       this.getListOfDish(_outletId.toString());
       this.getOutlet(_outletId.toString());
       this.getCouponList(_outletId.toString());
+      _sendoutletId = _outletId.toString();
     });
   }
 
@@ -197,7 +219,7 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                                                   ),
                                                 ),
                                               ),
-                                              Container(
+                                              _category.Counter == 0 ? Container(
                                                 child: RaisedButton(
                                                   child: Text(Strings.Add, style: TextStyle(fontSize: 13)),
                                                   shape:
@@ -208,10 +230,104 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                                                   disabledColor: Colors.grey,
                                                   textColor: Colors.white,
                                                   color:Colors.deepOrange,
-                                                  onPressed: () {
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      _category.Counter = _category.Counter +1;
+                                                      _noOfQuantity = _noOfQuantity + _category.Counter;
+                                                      _displayPrice = _displayPrice + _category.price;
+                                                    });
+                                                    var uuid = Uuid();
+                                                    final SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                    _udId = prefs.getString('udid');
+                                                    _dishes = [
+                                                        {
+                                                          "quantity":_category.Counter,
+                                                          "customisation":[],
+                                                          "uuId": uuid.v4(),
+                                                          "dishId":_category.dishId
+                                                        }
+                                                    ];
+                                                    addToCartApi(_sendoutletId,_dishes,_udId);
+                                                    showWidget();
                                                   },
                                                 ),
-                                              )
+                                              ) :
+                                              Container(
+                                                width: 100,
+                                                height: 40,
+                                                margin: EdgeInsets.only(bottom: 10),
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                                                    color:Colors.deepOrange,
+                                                ),
+
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        setState(() {
+                                                          _category.Counter = _category.Counter + 1;
+                                                          _noOfQuantity = _noOfQuantity + 1;
+                                                          _displayPrice = _displayPrice + _category.price;
+                                                        });
+                                                        var uuid = Uuid();
+                                                        final SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                        _udId = prefs.getString('udid');
+
+                                                        _dishes = [
+                                                          {
+                                                            "quantity":_category.Counter,
+                                                            "customisation":[],
+                                                            "uuId": uuid.v4(),
+                                                            "dishId":_category.dishId
+                                                          }
+                                                        ];
+                                                        addToCartApi(_sendoutletId, _dishes, _udId);
+
+                                                      },
+                                                      child:  Container(
+                                                        child:Image.asset("assets/images/add.png",width: 13,height: 13),
+                                                        padding: EdgeInsets.all(6),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: EdgeInsets.all(6),
+                                                      child: Text(
+                                                          _category.Counter.toString(),
+                                                          style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500,
+                                                              fontFamily: "Proxima_Nova_Bold")),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap:() async {
+                                                        setState(() {
+                                                          _category.Counter = _category.Counter - 1;
+                                                          _noOfQuantity = _noOfQuantity - 1;
+                                                          _displayPrice = _displayPrice -  _category.price;
+                                                        });
+                                                        var uuid = Uuid();
+                                                        final SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                        _udId = prefs.getString('udid');
+
+                                                        _dishes = [
+                                                          {
+                                                            "quantity":_category.Counter,
+                                                            "customisation":[],
+                                                            "uuId": uuid.v4(),
+                                                            "dishId":_category.dishId
+                                                          }
+                                                        ];
+                                                        addToCartApi(_sendoutletId, _dishes, _udId);
+                                                      },
+                                                      child: Container(
+                                                          padding: EdgeInsets.all(6),
+                                                          child:Image.asset("assets/images/less.png",width: 13,height: 13)
+                                                      ),
+                                                    )
+
+                                                  ],
+                                                ),
+                                              ),
                                             ],
                                           )
                                         ],
@@ -249,6 +365,7 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
         child: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Container(
                 padding: EdgeInsets.only(top:20,left: 20),
@@ -415,7 +532,9 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                       );
                     },
                   )
-              ) : Container(
+              )
+                  :
+              Container(
                 alignment: Alignment.topCenter,
                 child: Text(
                   "Coupon is not available" ,
@@ -433,14 +552,72 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                 margin: EdgeInsets.only(top:10),
                 child: _buildListPanel(),
               ),
+
+
             ],
           ),
 
         ),
-      )
+      ),
+      bottomNavigationBar:
+       _noOfQuantity != 0 ? Container(
+        color: Colors.black,
+        height: 60,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+                margin: EdgeInsets.only(left: 20),
+                child:Text(
+                    _noOfQuantity.toString() + " items  | " + _displayPrice.toString(),
+                    style: TextStyle(fontSize: 16,color: Colors.white, fontFamily:'Proxima_Nova_Bold',)
+                )
+            ),
+            Container(
+                margin: EdgeInsets.only(left: 20,right: 20),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                        context, MaterialPageRoute(builder: (context) => Cart()));
+                  },
+                  child: Text(
+                      Strings.view_cart,
+                      style: TextStyle(fontSize: 14,color: Colors.white, fontFamily:'Proxima_Nova_Bold',)
+                  ),
+                ),
+            ),
+          ],
+        ),
+      ) : Container(height: 0,),
     );
   }
 
+  addToCartApi(_outletId, List<dynamic>_dishes,_udId) async {
+    AddToCartRequest addToCartRequest = new AddToCartRequest();
+    DishService dishService = new DishService();
+    addToCartRequest.outletId = _outletId;
+    addToCartRequest.dishes = json.encode(_dishes);
+    addToCartRequest.udId = _udId;
+
+    var response = await dishService.addtoCart(addToCartRequest);
+    log(response.errorMessage);
+
+
+    /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content:  Text( _noOfQuantity.toString() + " items  | " + _displayPrice.toString(),
+          style: TextStyle(fontSize: 15,color: Colors.white, fontFamily:'ProximaNova_Regular',)),
+      backgroundColor: Colors.black,
+      duration: const Duration(seconds:1),
+      action: SnackBarAction(
+        label: 'VIEW CART',
+        textColor: Colors.white,
+
+        onPressed: () {
+        },
+      ),
+    ));*/
+
+  }
 }
 
 class Item {

@@ -8,6 +8,7 @@ import 'package:food_delivery/OtpVerfication/OtpModel.dart';
 import 'package:food_delivery/OtpVerfication/OtpService.dart';
 import 'package:food_delivery/Register/RegisterPage.dart';
 import 'package:food_delivery/String/Strings.dart';
+import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpVerification extends StatefulWidget {
@@ -47,8 +48,10 @@ class _OtpVerificationState extends State<OtpVerification> {
   @override
   void dispose() {
     _timer.cancel();
+
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +74,9 @@ class _OtpVerificationState extends State<OtpVerification> {
               child:  Center(
                 child: Text(
                   Strings.awesome_thanks,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
+                  style: TextStyle(
+                      fontSize: 20, fontFamily:'Proxima_Nova_ScOsf_Bold', color: Colors.black,fontWeight: FontWeight.w500
+                  ),
                 ),
               ),
             ),
@@ -80,7 +85,9 @@ class _OtpVerificationState extends State<OtpVerification> {
               child:  Center(
                 child: Text(
                   Strings.confirmation_code_otp,
-                  style: TextStyle(fontSize: 14, color: Colors.black),
+                  style: TextStyle(fontSize: 15,
+                      fontFamily:'Proxima_Nova_Alt_Light',
+                      color: Colors.black),
                 ),
               ),
             ),
@@ -89,160 +96,24 @@ class _OtpVerificationState extends State<OtpVerification> {
               child:  Center(
                 child: Text(
                   Strings.get_it_soon,
-                  style: TextStyle(fontSize: 14, color: Colors.black),
+                  style: TextStyle(fontSize: 15,
+                      fontFamily:'Proxima_Nova_Alt_Light',
+                      color: Colors.black),
                 ),
               ),
             ),
             Container(
                 padding: EdgeInsets.all(30),
-                child:Row(
-                  children: [
-                    Flexible(
-                      child: Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: TextFormField(
-                          textInputAction: TextInputAction.next,
-                          onSaved: (String val) => setState(() => _digit_1 = val),
-                          autofocus: true,
-                          maxLength: 1,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration:  InputDecoration(
-                            counterText: '',
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.deepOrange)
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.deepOrange)
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: TextFormField(
-                          textInputAction: TextInputAction.next,
-                          onSaved: (String val) => setState(() => _digit_2 = val),
-                          autofocus: true,
-                          maxLength: 1,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration:  InputDecoration(
-                            counterText: '',
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.deepOrange)
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.deepOrange)
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: TextFormField(
-                          textInputAction: TextInputAction.next,
-                          onSaved: (String val) => setState(() => _digit_3 = val),
-                          autofocus: true,
-                          maxLength: 1,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration:  InputDecoration(
-                            counterText: '',
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.deepOrange)
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.deepOrange)
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: TextFormField(
-                          textInputAction: TextInputAction.next,
-                          onSaved: (String val) => setState(() => _digit_4 = val),
-                          autofocus: true,
-                          maxLength: 1,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration:  InputDecoration(
-                            counterText: '',
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.deepOrange)
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.deepOrange)
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: TextFormField(
-                          textInputAction: TextInputAction.next,
-                          onSaved: (String val) => setState(() => _digit_5 = val),
-                          autofocus: true,
-                          maxLength: 1,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration:  InputDecoration(
-                            counterText: '',
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.deepOrange)
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.deepOrange)
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: TextFormField(
-                          textInputAction: TextInputAction.next,
-                          autofocus: true,
-                          onSaved: (String val) => setState(() => _digit_6 = val),
-                          maxLength: 1,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration:  InputDecoration(
-                            counterText: '',
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.deepOrange)
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.deepOrange)
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                )
+                child: PinEntryTextField(
+                  showFieldAsBox: false,
+                  fields: 6,
+                  onSubmit: (String pin){
+                    setState(() {
+                      _otpNumber = pin;
+                    });
+
+                  },
+                ),
             ),
             Container(
               child: GestureDetector(
@@ -252,8 +123,8 @@ class _OtpVerificationState extends State<OtpVerification> {
                 child:  Center(
                   child:
                   _startCount!=0 ?
-                  Text(Strings.resend_within +" "+"$_startCount"+" "+ Strings.second, style: TextStyle(fontSize: 14, color: Colors.deepOrange),) :
-                  Text(Strings.resend, style: TextStyle(fontSize: 14, color: Colors.deepOrange),),
+                  Text(Strings.resend_within +" "+"$_startCount"+" "+ Strings.second, style: TextStyle(fontSize: 15, fontFamily:'Proxima_Nova_ScOsf_Bold', color: Colors.deepOrange,fontWeight: FontWeight.w500),) :
+                  Text(Strings.resend, style: TextStyle(fontSize: 15, fontFamily:'Proxima_Nova_ScOsf_Bold', color: Colors.deepOrange,fontWeight: FontWeight.w500),),
                 ),
               )
 
@@ -263,17 +134,17 @@ class _OtpVerificationState extends State<OtpVerification> {
                   margin: EdgeInsets.only(top:30,left: 30,right: 30),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 45.0,
+                    height: 46.0,
                     child: RaisedButton(
-                      child: Text(Strings.verify_and_proceed, style: TextStyle(fontSize: 15)),
+                      child: Text(Strings.verify_and_proceed, style: TextStyle(fontSize: 15, fontFamily:'Proxima_Nova_ScOsf_Bold', color: Colors.white,fontWeight: FontWeight.w500)),
                       shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
                       disabledColor: Colors.grey,
-                      color: Colors.black,
+                      color: Colors.deepOrange,
                       textColor: Colors.white,
                       onPressed: () async {
                         final SharedPreferences prefs = await SharedPreferences.getInstance();
                         _formKey.currentState.save();
-                        _otpNumber = _digit_1 + _digit_2 + _digit_3 + _digit_4 + _digit_5 + _digit_6;
+                        //_otpNumber = _digit_1 + _digit_2 + _digit_3 + _digit_4 + _digit_5 + _digit_6;
 
                          prefs.setString("otpNumber", _otpNumber);
                         _countryCode = "+91";
@@ -303,7 +174,7 @@ class _OtpVerificationState extends State<OtpVerification> {
 }
 
 makeUserOTPLogin(_moblieNumber,_countryCode,_otpNumber,_udId) async {
- OtpLoginRequest otpLoginRequest = new OtpLoginRequest();
+  OtpLoginRequest otpLoginRequest = new OtpLoginRequest();
  OtpService otpService = new OtpService();
  otpLoginRequest.mobileNumber = _moblieNumber;
  otpLoginRequest.countryCode = _countryCode;

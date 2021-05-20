@@ -19,6 +19,10 @@ class Strings {
   static const String enter_your_phone_number = "Enter your phone number to proceed";
   static const String phone_number = "PHONE NUMBER";
   static const String login_password = "PASSWORD";
+  static const String login_sucess = "Login successfully";
+
+  static const String all_restaturant = "All Restaurants Nearby";
+  static const String discover_unique_tast = "Discover unique tastes near you";
   static const String bottom_nav_near_you = "Near You";
   static const String bottom_explore = "Explore";
   static const String bottom_cart = "Cart";
@@ -42,6 +46,7 @@ class Strings {
   static const String faq_link = "FAQs and Links";
   static const String edit_account = "EDIT ACCOUNT";
   static const String cancel = "CANCEL";
+  static const String view_cart = "VIEW CART";
   static const String logout = "LOGOUT";
 
 }

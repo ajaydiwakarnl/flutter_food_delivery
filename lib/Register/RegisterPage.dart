@@ -56,7 +56,9 @@ class _RegisterPageState extends State<RegisterPage> {
         automaticallyImplyLeading: false,
         title: Text(
           Strings.sign_up,
-          style: TextStyle(fontSize: 14, color: Colors.black),
+          style: TextStyle(fontSize: 15,
+              fontFamily:'Proxima_Nova_Bold',
+              color: Colors.black),
         ),
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back_ios, color: Colors.orange),
@@ -74,29 +76,33 @@ class _RegisterPageState extends State<RegisterPage> {
             children: <Widget>[
               Container(
                 child: Text(Strings.phone_number,
-                    style: TextStyle(fontSize: 15,color: Colors.black54)
+                    style: TextStyle(fontSize: 14,
+                        fontFamily:'Proxima_Nova_Alt_Light',
+                        color: Colors.black)
                 ),
               ),
               Container(
                 margin: EdgeInsets.only(top:6.0),
                 child: Text(_userPhoneNumber != null ? "+91 " + _userPhoneNumber : "",
-                    style: TextStyle(fontSize: 15,color: Colors.black)
+                    style: TextStyle(fontSize: 14,
+                        fontFamily:'Proxima_Nova_Bold',
+                        color: Colors.black)
                 ),
               ),//
               Container(
                 child: new TextFormField(
-                  cursorColor: Colors.green,
+                  cursorColor: Colors.deepOrange,
                   onSaved: (String val) => setState( () => _email = val),
                   decoration:  InputDecoration(
                     labelText: Strings.email_address,
-                    labelStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,),
+                    labelStyle: TextStyle(fontSize: 14,
+                        fontFamily:'Proxima_Nova_Alt_Light',
+                        color: Colors.black),
                     enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.deepOrange)
+                        borderSide: BorderSide(color: Colors.deepOrange,width: 2)
                     ),
                     focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.deepOrange)
+                        borderSide: BorderSide(color: Colors.deepOrange,width: 2)
                     ),
                   ),
 
@@ -104,15 +110,15 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               Container(
                 child: new TextFormField(
-                  cursorColor: Colors.green,
+                  cursorColor: Colors.deepOrange,
                    onSaved: (String val) => setState( () => _userName = val),
                   decoration:  InputDecoration(
                     labelText: Strings.name,
-                    labelStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,),
+                    labelStyle: TextStyle(fontSize: 14,
+                        fontFamily:'Proxima_Nova_Alt_Light',
+                        color: Colors.black),
                     enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.deepOrange)
+                        borderSide: BorderSide(color: Colors.deepOrange,width: 2)
                     ),
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.deepOrange)
@@ -123,19 +129,19 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               Container(
                 child: new TextFormField(
-                  cursorColor: Colors.green,
+                  cursorColor: Colors.deepOrange,
                   obscureText: true,
                   onSaved: (String val) => setState( () => _password = val),
                   decoration:  InputDecoration(
                     labelText: Strings.login_password,
-                    labelStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,),
+                    labelStyle: TextStyle(fontSize: 14,
+                        fontFamily:'Proxima_Nova_Alt_Light',
+                        color: Colors.black),
                     enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.deepOrange)
+                        borderSide: BorderSide(color: Colors.deepOrange,width: 2)
                     ),
                     focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.deepOrange)
+                        borderSide: BorderSide(color: Colors.deepOrange,width: 2)
                     ),
                   ),
                 ), //Email
@@ -144,7 +150,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 margin: EdgeInsets.only(top:20.0),
                 child: Text(
                   Strings.terms_and_condtion,
-                  style: TextStyle(fontSize: 14,color: Colors.black)
+                  style: TextStyle(fontSize: 14,
+                      fontFamily:'Proxima_Nova_Alt_Light',
+                      color: Colors.black)
                 )
               ),
               Container(
@@ -152,12 +160,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   margin: EdgeInsets.only(top:30),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      height: 45.0,
+                      height: 46.0,
                       child: RaisedButton(
-                        child: Text(Strings.sign_up, style: TextStyle(fontSize: 15)),
+                        child: Text(Strings.sign_up, style: TextStyle(fontSize: 16,
+                            fontFamily:'Proxima_Nova_Bold',
+                            color: Colors.white)),
                         shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
                         disabledColor: Colors.grey,
-                        color: Colors.black,
+                        color: Colors.deepOrange,
                         textColor: Colors.white,
                         onPressed: () async {
                           _formKey.currentState.save();
@@ -180,11 +190,21 @@ class _RegisterPageState extends State<RegisterPage> {
                             var response =  await registerService.CheckUser(registerRequest);
                             if(response.error == "false"){
                               setState(() {_isLoading = false;});
-                              Fluttertoast.showToast( msg: response.errorMessage, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIos: 2, backgroundColor: Colors.black, textColor: Colors.white);
+                              Fluttertoast.showToast(
+                                  msg: response.errorMessage,
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM, timeInSecForIos: 2,
+                                  backgroundColor: Colors.black,
+                                  textColor: Colors.white,
+                                  fontSize: 13);
                               Navigator.push(context,MaterialPageRoute(builder: (context) => LoginPage()),);
                             }else{
                               setState(() {_isLoading = false;});
-                              Fluttertoast.showToast( msg: response.errorMessage, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIos: 2, backgroundColor: Colors.black, textColor: Colors.white);
+                              Fluttertoast.showToast(
+                                  msg: response.errorMessage,
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM, timeInSecForIos: 2,
+                                  backgroundColor: Colors.black, textColor: Colors.white,fontSize: 13);
 
                             }
 

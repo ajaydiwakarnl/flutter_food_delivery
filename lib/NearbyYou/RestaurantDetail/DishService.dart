@@ -59,6 +59,25 @@ class DishService{
     }else{
       throw Exception('something went wrong');
     }
+  }
 
+
+  Future<AddToCartResponse> addtoCart (AddToCartRequest addToCartRequest) async {
+
+    String URL = ApiList.ADD_TO_CART;
+    String token = await LoginService().getToken();
+
+    final response = await http.post(URL,body: addToCartRequest.toJson(),headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer  $token',
+    });
+
+    log("AddToCartResponse" + response.body);
+
+    if(response.statusCode == 200){
+      return AddToCartResponse.fromJson(json.decode(response.body));
+    }else{
+      throw Exception('something went wrong');
+    }
   }
 }

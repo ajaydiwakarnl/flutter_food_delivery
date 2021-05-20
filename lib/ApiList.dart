@@ -13,7 +13,8 @@ class ApiList {
   static const String ADD_ADDRESS_API                   = apibaseUrl + "addAddress";
   static const String GET_PROFILE                       = apibaseUrl + "getProfile";
   static const String LIST_DISHES                       = apibaseUrl + "listDishes";
-  static const String COUPON_LIST                        = apibaseUrl + "couponList";
+  static const String COUPON_LIST                       = apibaseUrl + "couponList";
+  static const String ADD_TO_CART                       = apibaseUrl + "addToCart";
 
   //ADMIN RELATE API ROUTE
   static const String GET_OUTLET                       = adminbaseUrl + "getOutlet";
