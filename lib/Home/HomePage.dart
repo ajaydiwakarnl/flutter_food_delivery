@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/Account/Account.dart';
 import 'package:food_delivery/Cart/Cart.dart';
+import 'package:food_delivery/Cart/EmptyCart.dart';
 import 'package:food_delivery/Explore/Explore.dart';
 import 'package:food_delivery/NearbyYou/ListRestaurantModel.dart';
 import 'package:food_delivery/NearbyYou/ListRestaurantService.dart';
@@ -16,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-
+  int _cartId = 123;
   void initState(){
     super.initState();
   }

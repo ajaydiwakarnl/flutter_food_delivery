@@ -45,9 +45,12 @@ class ListRestaurantService{
     if(response.statusCode == 200){
       var getAddress = ListRestaurantResponse.fromJson(json.decode(response.body)).address;
       if(ListRestaurantResponse.fromJson(json.decode(response.body)).error == "false" ) {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
         ListRestaurantService().setLatitude(getAddress[0].latitude);
         ListRestaurantService().setLongitude(getAddress[0].longitude);
         StoreApiResponse().save("userAddress", getAddress[0].fullAddress);
+        log(getAddress[0].id.toString());
+        prefs.setString("addressId", getAddress[0].id.toString());
       }
 
       return ListRestaurantResponse.fromJson(json.decode(response.body));

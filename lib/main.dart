@@ -18,7 +18,7 @@ class splashApp  extends StatelessWidget {
     return MaterialApp(
       title: 'Splash Screen',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.deepOrange,
       ),
       home: splashPage(),
       debugShowCheckedModeBanner: false,

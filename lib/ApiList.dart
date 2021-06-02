@@ -1,6 +1,6 @@
 
 class ApiList {
-  static const String apibaseUrl = "http://44.242.96.167/foodapp/public/api/";
+  static const String apibaseUrl = "http://35.155.69.42/foodapp/public/api/";
   static const String adminbaseUrl = "http://44.242.96.167/foodapp/public/admin/";
 
   //API RELATE API ROUTE
@@ -15,6 +15,8 @@ class ApiList {
   static const String LIST_DISHES                       = apibaseUrl + "listDishes";
   static const String COUPON_LIST                       = apibaseUrl + "couponList";
   static const String ADD_TO_CART                       = apibaseUrl + "addToCart";
+  static const String VIEW_CART                         = apibaseUrl + "viewCart";
+  static const String UPDATE_CART                       = apibaseUrl + "updateCart";
 
   //ADMIN RELATE API ROUTE
   static const String GET_OUTLET                       = adminbaseUrl + "getOutlet";

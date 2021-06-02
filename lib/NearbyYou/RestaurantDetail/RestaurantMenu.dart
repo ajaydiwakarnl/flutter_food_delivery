@@ -1,4 +1,5 @@
 
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -29,8 +30,9 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
   List <Item> _data = generateItems(0);
   int _length  = 0,_cuponLength = 0, _noOfQuantity = 0,_displayPrice = 0;
   String _udId,_sendoutletId;
-  List<Map<String, dynamic>>  _dishes ;
+  //List<Map<String, dynamic>>  _dishes ;
   bool viewVisible = true ;
+  List<dishesArray> dishesItem = [];
 
   void showWidget(){
     setState(() {
@@ -236,18 +238,19 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                                                       _noOfQuantity = _noOfQuantity + _category.Counter;
                                                       _displayPrice = _displayPrice + _category.price;
                                                     });
+
                                                     var uuid = Uuid();
-                                                    final SharedPreferences prefs = await SharedPreferences.getInstance();
-                                                    _udId = prefs.getString('udid');
-                                                    _dishes = [
-                                                        {
-                                                          "quantity":_category.Counter,
-                                                          "customisation":[],
-                                                          "uuId": uuid.v4(),
-                                                          "dishId":_category.dishId
-                                                        }
-                                                    ];
-                                                    addToCartApi(_sendoutletId,_dishes,_udId);
+
+
+                                                    dishesArray array = dishesArray(
+                                                        quantity:_category.Counter,
+                                                        customisation: [],
+                                                        uuId: uuid.v4(),
+                                                        dishId:_category.dishId
+                                                    );
+
+
+                                                    dishesItem.add(array);
                                                     showWidget();
                                                   },
                                                 ),
@@ -260,31 +263,21 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                                                     borderRadius: BorderRadius.all(Radius.circular(5)),
                                                     color:Colors.deepOrange,
                                                 ),
-
                                                 child: Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
                                                     GestureDetector(
                                                       onTap: () async {
+
                                                         setState(() {
                                                           _category.Counter = _category.Counter + 1;
                                                           _noOfQuantity = _noOfQuantity + 1;
                                                           _displayPrice = _displayPrice + _category.price;
                                                         });
-                                                        var uuid = Uuid();
-                                                        final SharedPreferences prefs = await SharedPreferences.getInstance();
-                                                        _udId = prefs.getString('udid');
 
-                                                        _dishes = [
-                                                          {
-                                                            "quantity":_category.Counter,
-                                                            "customisation":[],
-                                                            "uuId": uuid.v4(),
-                                                            "dishId":_category.dishId
-                                                          }
-                                                        ];
-                                                        addToCartApi(_sendoutletId, _dishes, _udId);
-
+                                                        final index = dishesItem.indexWhere((element) => element.dishId == _category.dishId);
+                                                        log(index.toString());
+                                                        dishesItem[index].quantity = _category.Counter;
                                                       },
                                                       child:  Container(
                                                         child:Image.asset("assets/images/add.png",width: 13,height: 13),
@@ -305,19 +298,8 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                                                           _noOfQuantity = _noOfQuantity - 1;
                                                           _displayPrice = _displayPrice -  _category.price;
                                                         });
-                                                        var uuid = Uuid();
-                                                        final SharedPreferences prefs = await SharedPreferences.getInstance();
-                                                        _udId = prefs.getString('udid');
-
-                                                        _dishes = [
-                                                          {
-                                                            "quantity":_category.Counter,
-                                                            "customisation":[],
-                                                            "uuId": uuid.v4(),
-                                                            "dishId":_category.dishId
-                                                          }
-                                                        ];
-                                                        addToCartApi(_sendoutletId, _dishes, _udId);
+                                                        final index = dishesItem.indexWhere((element) => element.dishId == _category.dishId);
+                                                        dishesItem[index].quantity = _category.Counter;
                                                       },
                                                       child: Container(
                                                           padding: EdgeInsets.all(6),
@@ -576,9 +558,13 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
             Container(
                 margin: EdgeInsets.only(left: 20,right: 20),
                 child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacement(
-                        context, MaterialPageRoute(builder: (context) => Cart()));
+                  onTap: () async {
+                    final SharedPreferences prefs = await SharedPreferences.getInstance();
+                    _udId = prefs.getString('udid');
+
+
+                    addToCartApi(_sendoutletId, dishesItem, _udId);
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Cart()));
                   },
                   child: Text(
                       Strings.view_cart,
@@ -592,33 +578,37 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
     );
   }
 
-  addToCartApi(_outletId, List<dynamic>_dishes,_udId) async {
+  addToCartApi(_outletId, List<dishesArray>_dishes,_udId) async {
+
     AddToCartRequest addToCartRequest = new AddToCartRequest();
     DishService dishService = new DishService();
     addToCartRequest.outletId = _outletId;
-    addToCartRequest.dishes = json.encode(_dishes);
+    addToCartRequest.dishes = jsonEncode(_dishes);
     addToCartRequest.udId = _udId;
 
     var response = await dishService.addtoCart(addToCartRequest);
-    log(response.errorMessage);
-
-
-    /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content:  Text( _noOfQuantity.toString() + " items  | " + _displayPrice.toString(),
-          style: TextStyle(fontSize: 15,color: Colors.white, fontFamily:'ProximaNova_Regular',)),
-      backgroundColor: Colors.black,
-      duration: const Duration(seconds:1),
-      action: SnackBarAction(
-        label: 'VIEW CART',
-        textColor: Colors.white,
-
-        onPressed: () {
-        },
-      ),
-    ));*/
-
+    return response.error;
   }
+
 }
+
+
+class dishesArray{
+  int quantity;
+  List<dynamic> customisation;
+  String uuId;
+  int dishId;
+
+  dishesArray( { this.quantity, this.customisation, this.uuId, this.dishId });
+
+  Map toJson() => {
+    'quantity': quantity,
+    'customisation': customisation,
+    'uuId': uuId,
+    'dishId': dishId,
+  };
+}
+
 
 class Item {
   String dishCategoryName;
@@ -627,9 +617,7 @@ class Item {
   String dishPrice;
   String dishSlashPrice;
   bool isExpanded;
-
   Item({ this.dishCategoryName,  this.dishName ,this.dishImage, this.dishPrice, this.dishSlashPrice, this.isExpanded = false });
-
 }
 
 List<Item> generateItems (int noOfItems){

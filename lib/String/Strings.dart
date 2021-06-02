@@ -42,11 +42,20 @@ class Strings {
   static const String edit = "EDIT";
   static const String Add = "ADD";
   static const String managed_address = "Manage Addresses";
+  static const String change_address = "Change Addresses";
   static const String help = "Help";
   static const String faq_link = "FAQs and Links";
   static const String edit_account = "EDIT ACCOUNT";
   static const String cancel = "CANCEL";
   static const String view_cart = "VIEW CART";
+  static const String any_restaurant_required = "Any restaurant required ? We will try our best to convey it";
+  static const String maketip = "Tip your hunger saviour";
+  static const String apply_cupon = "APPLY COUPON";
+  static const String thank_you_tip = "Thank your delivery partner for helping you stay safe indoors.Support them throught these tought times with a tip.";
+  static const String proceed_to_pay = "PROCEED TO PAY";
+  static const String indian_rupess = " \u20B9 ";
+
+
   static const String logout = "LOGOUT";
 
 }
